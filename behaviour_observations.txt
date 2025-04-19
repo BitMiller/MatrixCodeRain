@@ -1,0 +1,83 @@
+@250418-5-1311
+
+During analysing the code-rain I realised that the guys in the movie were also staring it for the same reason:
+to figure it out HOW THE F*CK IT WORX!
+Meanwhile they practiced this tongue twister, saying it 150 wpm: "Matrix screensaver!"
+
+A glitch catch: The 3 main monitors on the deck of Nebuchadnezzar show the exact same code rain.
+Sitting there, Tank could've said 'Déjà vu!' 60 times an hour...
+
+The middle monitor size in terms of character locations: 60x30. Since they show the same, I suppose the other two also have these dimensions.
+
+According to the animations shown on CRT monitors in Matrix I. :
+
+Let's expand the observations to gain a more general comprehension which can explain some strange happenings as well! Working out an appropriate terminology is inevitable.
+
+Igniter drop
+Extinguisher drop
+Trail
+Rain space
+Screen space
+Character location
+Blind characters
+Dynamic characters
+Static characters
+Standalone characters
+Changing static characters
+X-glitch
+Drop fluctuation
+Drop birth
+Drop death
+Excitement levels / States
+
+> There's an "igniter drop", and an "extinguisher drop".
+> Both can born and die somewhere in the rain space.
+> "Rain space" is far bigger than the "screen space". We can only observe a small portion of the rain space through the screen. Thus it makes sense to use multiple monitors.
+> The animation is blocky. The characters aren't refreshed one by one. The whole screen is refreshed frame by frame.
+> There are character locations what are blank / burnt out and never show the code. These can form longer columns. This is a mask in screen space and doesn't bother in rain space.
+> There's only one layer. No multiple rain layers in the background.
+> All drops have the same fall speed.
+> Let fall speed be 1 character per frame.
+> Changes in character location state happens with slight transition due to the inertia of the phosphor excitement.
+> Drops can often fall in pairs. I call them twins. But they are not connected. One can die independently from the other.
+> After the igniter drop the glow disappears in 4 characters. The trail's 4th character doesn't glow at all.
+> The extinguisher drop in effect is virtually the 2nd character from the trail's end. The trail fades to black in 2 characters. Putting it another way: a character location fades to black in 3 frames.
+> Any character space can have two behaviours: changing and non-changing.
+> Let 66% of the character locations be non-changing.
+> Standalone character locations rarely can be ignited at random places.
+> Very rarely can happen that a non-changing character changes, even so it keeps the non-changing state.
+> Let's suppose: The random ignition of character locations changes also the static character (except the case when the randomly generated ignited character is the same as the preceding one) without a glow-up.
+> Let's suppose: There is random extinguishion as well.
+
+> The change property is basically fixed per character location. Falling drops cannot change it.
+> Let's suppose: the occasional drops can cause character change. Let both type be able to do this.
+> The igniter drop can jump to the neighbouring row occasionally and jump back after 1 character place immediately.
+> Let's suppose: The extinguisher drop can jump to the neighbouring row occasionally as well.
+> Because of this jumping the drops' movement has to be simulated 1-1 columns offscreen.
+> Because of this behaviour unignited or unextinguished characters can be left behind.
+> Blank space is also amongst the randomizable characters.
+
+> I define 7 levels of phosphor excitement of the CRT screen for this animation:
+ > 1: Glowing drop character
+ > 2: Fading glow level 1.
+ > 3: Fading glow level 2.
+ > 4: Normal character appearance
+ > 5: Fading character level 1.
+ > 6: Fading character level 2.
+ > 7: Blank (black)
+
+> If an igniter drop touches a character location, ignition happens in state 7 (blank), 6 or 5 (fading because of extinguishion), and it turns into state 1. Any other states remain unaffected.
+> A state 1 character location turns into state 2.
+> A state 2 character location turns into state 3.
+> A state 3 character location turns into state 4 and stays there until touched by extinguisher drops.
+> If an extinguisher drop reaches a character location in state 1 to 4, it pushes that to state 5. The other states remain unaffected.
+> A state 5 character location turns into state 6.
+> A state 6 character location turns into state 7 and stays there until touched by igniter drops.
+
+> For proper animation randomness has to be smartly handled.
+
+Questions:
+> Is there an observable standalone dynamic character?
+
+
+
