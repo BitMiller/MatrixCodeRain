@@ -82,7 +82,7 @@ body {
 
 
 .cl_debugBlind_bkg {
-    background-color: #0F0;
+    background-color: #666;
 }
 
 .cl_debugIgniter_bkg {
@@ -102,7 +102,7 @@ body {
 }
 
 
-.cl_state_01 {
+.cl_state_06 {
     color: #FFF;
     text-shadow:
         0px 0px 05px #FFF,
@@ -117,18 +117,18 @@ body {
         0px 0px 55px #0F0;
 }
 
-.cl_state_02 {
-    color: #FFF;
+.cl_state_05 {
+    color: #9F9;
     text-shadow:
-        0px 0px 05px #FFF,
-        0px 0px 15px #FFF,
-        0px 0px 25px #FFF,
-        0px 0px 35px #AFA,
+        0px 0px 05px #9F9,
+        0px 0px 15px #9F9,
+        0px 0px 25px #9F9,
+        0px 0px 35px #3F3,
         0px 0px 35px #0F0,
         0px 0px 45px #0F0,
 }
 
-.cl_state_03 {
+.cl_state_04 {
     color: #3F3;
     text-shadow:
         0px 0px 05px #3F3,
@@ -138,30 +138,30 @@ body {
         0px 0px 35px #090,
 }
 
-.cl_state_04 {
-    color: #0F0;
+.cl_state_03 {
+    color: #0A0;
     text-shadow:
         0px 0px 05px #0F0,
         0px 0px 15px #0A0,
         0px 0px 25px #060,
 }
 
-.cl_state_05 {
-    color: #0A0;
+.cl_state_02 {
+    color: #070;
     text-shadow:
         0px 0px 05px #090,
         0px 0px 15px #060,
         0px 0px 25px #030,
 }
 
-.cl_state_06 {
-    color: #060;
+.cl_state_01 {
+    color: #030;
     text-shadow:
         0px 0px 05px #060,
         0px 0px 15px #030,
 }
 
-.cl_state_07 {
+.cl_state_00 {
     color: black;
     text-shadow: none;
     visibility: hidden;
@@ -204,6 +204,7 @@ body {
     top: 0;
     left: 0;
     padding: 10px;
+    user-select: none;
 }
 
 #id_debugMask {
@@ -212,9 +213,9 @@ body {
     /*grid-auto-rows: 1.2em;*/
     place-items: center;
     line-height: 1;
-    border: 1px solid white;
+    border: 2px solid white;
     z-index: 2;
-    background-color: grey;
+    /*background-color: grey;*/
     opacity: 0.3;
     pointer-events: none;
 }

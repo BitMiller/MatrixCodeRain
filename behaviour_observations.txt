@@ -9,9 +9,11 @@ Sitting there, Tank could've said 'Déjà vu!' 60 times an hour...
 
 The middle monitor size in terms of character locations: 60x30. Since they show the same, I suppose the other two also have these dimensions.
 
-According to the animations shown on CRT monitors in Matrix I. :
+This is according to the animations shown on CRT monitors in Matrix I.
 
-Let's expand the observations to gain a more general comprehension which can explain some strange happenings as well! Working out an appropriate terminology is inevitable.
+Let's expand the observations to gain a more general comprehension which can explain some strange happenings as well!
+
+A proper and dedicated terminology is indispensable:
 
 Igniter drop
 Extinguisher drop
@@ -59,22 +61,21 @@ Excitement levels / States
 > Blank space is also amongst the randomizable characters.
 
 > I define 7 levels of phosphor excitement of the CRT screen for this animation:
- > 1: Glowing drop character
- > 2: Fading glow level 1.
- > 3: Fading glow level 2.
- > 4: Normal character appearance
- > 5: Fading character level 1.
- > 6: Fading character level 2.
- > 7: Blank (black)
+ > 6: Glowing drop character
+ > 5: Fading glow level 1.
+ > 4: Fading glow level 2.
+ > 3: Normal character appearance
+ > 2: Fading character level 1.
+ > 1: Fading character level 2.
+ > 0: Blank (black)
 
-> If an igniter drop touches a character location, ignition happens in state 7 (blank), 6 or 5 (fading because of extinguishion), and it turns into state 1. Any other states remain unaffected.
-> A state 1 character location turns into state 2.
-> A state 2 character location turns into state 3.
-> A state 3 character location turns into state 4 and stays there until touched by extinguisher drops.
-> If an extinguisher drop reaches a character location in state 1 to 4, it pushes that to state 5. The other states remain unaffected.
-> A state 5 character location turns into state 6.
-> A state 6 character location turns into state 7 and stays there until touched by igniter drops.
-> A state 7 character location is blank.
+> If an igniter drop touches a character location, ignition happens in state 0 (blank), 1 or 2 (fading because of extinguishion), and it turns into state 6. Any other states remain unaffected.
+> A state 6 character location turns into state 5.
+> A state 5 character location turns into state 4.
+> A state 4 character location turns into state 3 and stays there until touched by extinguisher drops.
+> If an extinguisher drop reaches a character location in state 3 to 6, it pushes that to state 2. The other states remain unaffected.
+> A state 2 character location turns into state 1.
+> A state 1 character location turns into state 0 and stays there until touched by igniter drops.
 
 > For proper animation randomness has to be smartly handled.
 
@@ -83,5 +84,6 @@ Questions:
 
 If you find a bug in the animation - it's not my fault. It is a bug in the Matrix.
 
-
+Stare it with love!
+I've put lots of chicks inside there 🙂
 

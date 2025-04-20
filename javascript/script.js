@@ -32,8 +32,12 @@ const maxBlindColumnHeight = 7;
 const xGlitchProbability = 0.01;
 const deathProbability = 0.01;
 const fluctuationProbability = 0.01;
+const twinProbability = 0.05;
+var igniterDrop_waitForTwin = false;
+var extinguisherDrop_waitForTwin = false;
+var changeCharactersNthFrames = 2;
 
-const timeStart = 0;
+var timeStart = 0;
 var timeFrameLength = 100;
 e_inputTextFrameLength.value = timeFrameLength;
 
@@ -65,58 +69,58 @@ function createCharacterLocation(character = " ", static = false, blind = false,
     };
 }
 
-function initScreenSpace(l_a_screenSpace, l_e_a_screen, l_e_debugMask, l_screenSpaceX, l_screenSpaceY, l_a_charray, l_charNumNotMirrored, l_charNumNotBold) {
-    for (let j = 0; j < l_screenSpaceY; j++) {
-        l_a_screenSpace.push(new Array());
+function initScreenSpace() {
+    for (let j = 0; j < screenSpaceY; j++) {
+        a_screenSpace.push(new Array());
         let t_blind = false;
 
-        for (let i = 0; i < l_screenSpaceX; i++) {
-            let charIndex = Math.floor(Math.random() * l_a_charray.length);
+        for (let i = 0; i < screenSpaceX; i++) {
+            let charIndex = Math.floor(Math.random() * a_charray.length);
             let t_character = charIndex;
             let t_static = Math.random() < 0.33 ? false : true;
-            let t_state = 7;
+            let t_state = 0;
             let t_a_element = new Array(document.createElement("span"), document.createElement("span"));
             let t_debugElement = document.createElement("span");
 
-            t_a_element[0].innerHTML = l_a_charray[charIndex];
-            t_a_element[1].innerHTML = l_a_charray[charIndex];
+            t_a_element[0].innerHTML = a_charray[charIndex];
+            t_a_element[1].innerHTML = a_charray[charIndex];
             t_debugElement.innerHTML = " ";
 
-            if (charIndex >= l_charNumNotMirrored) {
+            if (charIndex >= charNumNotMirrored) {
                 t_a_element[0].classList.add("cl_mirrorY");
                 t_a_element[1].classList.add("cl_mirrorY");
             }
-            if (charIndex >= l_charNumNotBold) {
+            if (charIndex >= charNumNotBold) {
                 t_a_element[0].classList.add("cl_bold");
                 t_a_element[1].classList.add("cl_bold");
             }
             t_a_element[0].classList.add("cl_state_0" + t_state);
             t_a_element[1].classList.add("cl_state_0" + t_state);
 
-            l_e_a_screen[0].classList.add("cl_visiblePage");
-            l_e_a_screen[1].classList.add("cl_activePage");
-            l_e_a_screen[0].appendChild(t_a_element[0]);
-            l_e_a_screen[1].appendChild(t_a_element[1]);
-            l_e_debugMask.appendChild(t_debugElement);
-            l_a_screenSpace[j].push(createCharacterLocation(t_character, t_static, t_blind, t_state, t_a_element, t_debugElement));
+            e_a_screen[0].classList.add("cl_visiblePage");
+            e_a_screen[1].classList.add("cl_activePage");
+            e_a_screen[0].appendChild(t_a_element[0]);
+            e_a_screen[1].appendChild(t_a_element[1]);
+            e_debugMask.appendChild(t_debugElement);
+            a_screenSpace[j].push(createCharacterLocation(t_character, t_static, t_blind, t_state, t_a_element, t_debugElement));
         }
     }
 }
 
 /* Generate blinds on blind mask */
 
-function initBlindMask(l_a_screenSpace, l_screenSpaceX, l_screenSpaceY, l_maxBlindColumnHeight) {
-    for (let j = -l_maxBlindColumnHeight; j < l_screenSpaceY; j++) {
-        for (let i = 0; i < l_screenSpaceX; i++) {
+function initBlindMask() {
+    for (let j = -maxBlindColumnHeight; j < screenSpaceY; j++) {
+        for (let i = 0; i < screenSpaceX; i++) {
             if (Math.random() < 0.03) {
-                let columnLength = Math.floor((1 - Math.cos(Math.random() * 90 * Math.PI / 180)) * l_maxBlindColumnHeight + 1);
+                let columnLength = Math.floor((1 - Math.cos(Math.random() * 90 * Math.PI / 180)) * maxBlindColumnHeight + 1);
                 //console.log("columnLength: " + columnLength);
                 for (let k = 0; k < columnLength; k++) {
-                    if (j+k >= 0 && j+k < l_screenSpaceY) {
-                        l_a_screenSpace[j+k][i].blind = "1";
-                        l_a_screenSpace[j+k][i].a_element[0].classList.add("cl_blind");
-                        l_a_screenSpace[j+k][i].a_element[1].classList.add("cl_blind");
-                        l_a_screenSpace[j+k][i].debugElement.classList.add("cl_debugBlind_bkg");
+                    if (j+k >= 0 && j+k < screenSpaceY) {
+                        a_screenSpace[j+k][i].blind = "1";
+                        a_screenSpace[j+k][i].a_element[0].classList.add("cl_blind");
+                        a_screenSpace[j+k][i].a_element[1].classList.add("cl_blind");
+                        a_screenSpace[j+k][i].debugElement.classList.add("cl_debugBlind_bkg");
                     }
                 }
             }
@@ -126,18 +130,37 @@ function initBlindMask(l_a_screenSpace, l_screenSpaceX, l_screenSpaceY, l_maxBli
 
 /* Initialize drops */
 
-function generateDropInstance(l_screenSpaceX, l_screenSpaceY, l_rainSpaceTopOverflow) {
+function dropExistsInPosition(x, y) {
+    let i = 0;
+    while (i < a_igniterDrops.length && (a_igniterDrops[i].x != x || a_igniterDrops[i].y != y))
+        i++;
+
+    let j = 0;
+    while (j < a_extinguisherDrops.length && (a_extinguisherDrops[j].x != x || a_extinguisherDrops[j].y != y))
+        j++;
+
+    return i < a_igniterDrops.length || j < a_extinguisherDrops;
+}
+
+function generateDropInstance() {
+    let x, y;
+
+    do {
+        x = Math.floor(Math.random() * (screenSpaceX + 2)) - 1;
+        y = Math.floor(Math.random() * (screenSpaceY + rainSpaceTopOverflow)) - rainSpaceTopOverflow;
+    } while (dropExistsInPosition(x, y));
+
     return {
-        "x": Math.floor(Math.random() * (l_screenSpaceX + 2)) - 1,
-        "y": Math.floor(Math.random() * (l_screenSpaceY + l_rainSpaceTopOverflow)) - l_rainSpaceTopOverflow,
+        "x": x,
+        "y": y,
         "returnDirection": 0
     };
 }
 
-function initDropInstances(l_a_igniterDrops, l_a_extinguisherDrops, l_countPerDropType, l_screenSpaceX, l_screenSpaceY, l_rainSpaceTopOverflow) {
-    for (let i = 0; i < l_countPerDropType; i++) {
-        l_a_igniterDrops.push(generateDropInstance(l_screenSpaceX, l_screenSpaceY, l_rainSpaceTopOverflow));
-        l_a_extinguisherDrops.push(generateDropInstance(l_screenSpaceX, l_screenSpaceY, l_rainSpaceTopOverflow));
+function initDropInstances() {
+    for (let i = 0; i < countPerDropType; i++) {
+        a_igniterDrops.push(generateDropInstance());
+        a_extinguisherDrops.push(generateDropInstance());
     }
 }
 
@@ -155,7 +178,7 @@ function dropStep() {
         }
         /* Decide if the drop will die. */
         if (Math.random() < deathProbability) {
-            a_igniterDrops[i] = generateDropInstance(screenSpaceX, screenSpaceY, rainSpaceTopOverflow);
+            a_igniterDrops[i] = generateDropInstance();
         }
         /* Is the drop in a glitch state? If it is, return it to its original trail. */
         if (a_igniterDrops[i].returnDirection != 0) {
@@ -172,7 +195,7 @@ function dropStep() {
         a_igniterDrops[i].y++;
         /* If it passed the bottom of the screen it gets re-generated. */
         if (a_igniterDrops[i].y >= screenSpaceY) {
-            a_igniterDrops[i] = generateDropInstance(screenSpaceX, screenSpaceY, rainSpaceTopOverflow);
+            a_igniterDrops[i] = generateDropInstance();
         }
         /* If the drop is in screen space it touches the character location. */
         if (pointInRectangle(a_igniterDrops[i].x, a_igniterDrops[i].y, 0, 0, screenSpaceX-1, screenSpaceY-1)) {
@@ -199,7 +222,7 @@ function dropStep() {
         }
         /* Decide if the drop will die. */
         if (Math.random() < deathProbability) {
-            a_extinguisherDrops[i] = generateDropInstance(screenSpaceX, screenSpaceY, rainSpaceTopOverflow);
+            a_extinguisherDrops[i] = generateDropInstance();
         }
         /* Is the drop in a glitch state? If it is, return it to its original trail. */
         if (a_extinguisherDrops[i].returnDirection != 0) {
@@ -216,7 +239,7 @@ function dropStep() {
         a_extinguisherDrops[i].y++;
         /* If it passed the bottom of the screen it gets re-generated. */
         if (a_extinguisherDrops[i].y >= screenSpaceY) {
-            a_extinguisherDrops[i] = generateDropInstance(screenSpaceX, screenSpaceY, rainSpaceTopOverflow);
+            a_extinguisherDrops[i] = generateDropInstance();
         }
         /* If the drop is in screen space it touches the character location. */
         if (pointInRectangle(a_extinguisherDrops[i].x, a_extinguisherDrops[i].y, 0, 0, screenSpaceX-1, screenSpaceY-1)) {
@@ -232,37 +255,47 @@ function dropStep() {
     }
 }
 
-function stepCharacterLocations() {
+function changeCharacters() {
     for (let j = 0; j < screenSpaceY; j++) {
         for (let i = 0; i < screenSpaceX; i++) {
             if (!a_screenSpace[j][i].blind) {
                 a_screenSpace[j][i].a_element[activePage].innerHTML = a_screenSpace[j][i].a_element[visiblePage].innerHTML;
                 a_screenSpace[j][i].a_element[activePage].className = a_screenSpace[j][i].a_element[visiblePage].className;
                 /* Update dynamic characters */
-                if (!a_screenSpace[j][i].blind && !a_screenSpace[j][i].static) {
+                if (frameCounter % changeCharactersNthFrames == 0 && !a_screenSpace[j][i].blind && !a_screenSpace[j][i].static) {
                     changeCharacter(a_screenSpace[j][i].a_element[activePage]);
                 }
                 /* Check if the location got touched by drops */
                 if (a_screenSpace[j][i].touched != 0) {
                     /* Ignited */
-                    if (a_screenSpace[j][i].touched == 1 && a_screenSpace[j][i].state >= 5 && a_screenSpace[j][i].state <= 7) {
-                        a_screenSpace[j][i].state = 1;
+                    if (a_screenSpace[j][i].touched == 1 && a_screenSpace[j][i].state >= 0 && a_screenSpace[j][i].state <= 2) {
+                        a_screenSpace[j][i].state = 6;
                     }
                     /* Extinguished */
-                    else if (a_screenSpace[j][i].touched == -1 && a_screenSpace[j][i].state >= 1 && a_screenSpace[j][i].state <= 4) {
-                        a_screenSpace[j][i].state = 5;
+                    else if (a_screenSpace[j][i].touched == -1 && a_screenSpace[j][i].state >= 3 && a_screenSpace[j][i].state <= 6) {
+                        a_screenSpace[j][i].state = 2;
                     }
-                    a_screenSpace[j][i].a_element[activePage].classList = "cl_state_0" + a_screenSpace[j][i].state;
+                    clearStateClasses(a_screenSpace[j][i].a_element[activePage]);
+                    a_screenSpace[j][i].a_element[activePage].classList.add("cl_state_0" + a_screenSpace[j][i].state);
                     a_screenSpace[j][i].touched = 0;
                 }
-                else if (a_screenSpace[j][i].state >= 1 && a_screenSpace[j][i].state < 7 && a_screenSpace[j][i].state != 4) {
-                    a_screenSpace[j][i].state++;
-                    a_screenSpace[j][i].a_element[activePage].classList = "cl_state_0" + a_screenSpace[j][i].state;
+                /* If not touched and differs from the glow-static state */
+                else if (a_screenSpace[j][i].state > 0 && a_screenSpace[j][i].state <= 6 && a_screenSpace[j][i].state != 3) {
+                    a_screenSpace[j][i].state--;
+                    clearStateClasses(a_screenSpace[j][i].a_element[activePage]);
+                    a_screenSpace[j][i].a_element[activePage].classList.add("cl_state_0" + a_screenSpace[j][i].state);
                 }
             }
         }
     }
 }
+
+function clearStateClasses(e) {
+    for (let i = 0; i < 7; i++) {
+        e.classList.remove("cl_state_0" + i);
+    }
+}
+
 /*
 function refreshActiveFromVisible() {
     for (let j = 0; j < screenSpaceY; j++) {
@@ -302,10 +335,10 @@ function step() {
     /* Then spend time with the calculation */
     dropStep();
     dropFluctuation();
-    stepCharacterLocations();
+    changeCharacters();
 
     if (frameCounter == stopAtFrame_debug) {
-        clearInterval(animation);
+        clearInterval(animationHandle);
         console.log("Interval cleared!");
     }
 }
@@ -324,12 +357,12 @@ function flipPages() {
 }
 
 function startAnimation() {
-    clearInterval(animation);
-    animation = setInterval(() => step(), timeFrameLength);
+    clearInterval(animationHandle);
+    animationHandle = setInterval(() => step(), timeFrameLength);
 }
 
 function stopAnimation() {
-    clearInterval(animation);
+    clearInterval(animationHandle);
 }
 
 function debugStop() {
@@ -355,10 +388,10 @@ function setTimeFrameLength() {
     }
 }
 
-initScreenSpace(a_screenSpace, e_a_screen, e_debugMask, screenSpaceX, screenSpaceY, a_charray, charNumNotMirrored, charNumNotBold);
-initBlindMask(a_screenSpace, screenSpaceX, screenSpaceY, maxBlindColumnHeight);
-initDropInstances(a_igniterDrops, a_extinguisherDrops, countPerDropType, screenSpaceX, screenSpaceY, rainSpaceTopOverflow);
+initScreenSpace();
+initBlindMask();
+initDropInstances();
 
-var animation = setInterval(() => step(), timeFrameLength);
+var animationHandle = setInterval(() => step(), timeFrameLength);
 
 
