@@ -48,6 +48,10 @@ body {
     opacity: 0;
 }
 
+.cl_displayNone {
+    display: none !important;
+}
+
 .cl_mask_bkg_0 {
     background-color: #F00;
 }
@@ -76,9 +80,93 @@ body {
     background-color: #300;
 }
 
-.cl_debugMask_bkg {
-    background-color: #080;
+
+.cl_debugBlind_bkg {
+    background-color: #0F0;
 }
+
+.cl_debugIgniter_bkg {
+    background-color: #F00;
+}
+
+.cl_debugExtinguisher_bkg {
+    background-color: #00F;
+}
+
+.cl_debugIgniterBlind_bkg {
+    background-color: #FF0;
+}
+
+.cl_debugExtinguisherBlind_bkg {
+    background-color: #0FF;
+}
+
+
+.cl_state_01 {
+    color: #FFF;
+    text-shadow:
+        0px 0px 05px #FFF,
+        0px 0px 15px #FFF,
+        0px 0px 25px #FFF,
+        0px 0px 35px #AFA,
+        0px 0px 35px #AFA,
+        0px 0px 35px #AFA,
+        0px 0px 35px #AFA,
+        0px 0px 35px #0F0,
+        0px 0px 45px #0F0,
+        0px 0px 55px #0F0;
+}
+
+.cl_state_02 {
+    color: #FFF;
+    text-shadow:
+        0px 0px 05px #FFF,
+        0px 0px 15px #FFF,
+        0px 0px 25px #FFF,
+        0px 0px 35px #AFA,
+        0px 0px 35px #0F0,
+        0px 0px 45px #0F0,
+}
+
+.cl_state_03 {
+    color: #3F3;
+    text-shadow:
+        0px 0px 05px #3F3,
+        0px 0px 15px #3F3,
+        0px 0px 25px #0C0,
+        0px 0px 35px #0A0,
+        0px 0px 35px #090,
+}
+
+.cl_state_04 {
+    color: #0F0;
+    text-shadow:
+        0px 0px 05px #0F0,
+        0px 0px 15px #0A0,
+        0px 0px 25px #060,
+}
+
+.cl_state_05 {
+    color: #0A0;
+    text-shadow:
+        0px 0px 05px #090,
+        0px 0px 15px #060,
+        0px 0px 25px #030,
+}
+
+.cl_state_06 {
+    color: #060;
+    text-shadow:
+        0px 0px 05px #060,
+        0px 0px 15px #030,
+}
+
+.cl_state_07 {
+    color: black;
+    text-shadow: none;
+    visibility: hidden;
+}
+
 
 .cl_screenPage {
     margin: 0 auto;
@@ -110,6 +198,14 @@ body {
     visibility: visible;
 }
 
+
+#id_menu_container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+}
+
 #id_debugMask {
     position: absolute;
     display: grid;
@@ -119,7 +215,7 @@ body {
     border: 1px solid white;
     z-index: 2;
     background-color: grey;
-    opacity: 0.5;
+    opacity: 0.3;
     pointer-events: none;
 }
 

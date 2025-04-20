@@ -6,6 +6,14 @@
     </head>
 
     <body>
+        <div id="id_menu_container">
+            <p onclick="startAnimation()">[Start animation]</p>
+            <p onclick="step()">[Step frame]</p>
+            <p onclick="stopAnimation()">[Stop animation]</p>
+            <p onclick="debugStop()">[Debug stop]</p>
+            <p onclick="toggleDebugMask()">[Toggle debug mask]</p>
+            <p><span>Frame length: </span><input type="number" step="1" min="0" id="id_input_text_frame_length"><span onclick="setTimeFrameLength()">[Set]</span></p>
+        </div>
         <div id="id_testOutput"></div>
         <div id="id_screen_a"></div>
         <div id="id_screen_b"></div>

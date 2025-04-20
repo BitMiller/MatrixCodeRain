@@ -15,6 +15,7 @@ Let's expand the observations to gain a more general comprehension which can exp
 
 Igniter drop
 Extinguisher drop
+Twin drops
 Trail
 Rain space
 Screen space
@@ -73,6 +74,7 @@ Excitement levels / States
 > If an extinguisher drop reaches a character location in state 1 to 4, it pushes that to state 5. The other states remain unaffected.
 > A state 5 character location turns into state 6.
 > A state 6 character location turns into state 7 and stays there until touched by igniter drops.
+> A state 7 character location is blank.
 
 > For proper animation randomness has to be smartly handled.
 
