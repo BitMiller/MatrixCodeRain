@@ -81,5 +81,7 @@ Excitement levels / States
 Questions:
 > Is there an observable standalone dynamic character?
 
+If you find a bug in the animation - it's not my fault. It is a bug in the Matrix.
+
 
 

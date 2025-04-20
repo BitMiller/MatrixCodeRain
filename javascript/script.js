@@ -34,7 +34,7 @@ const deathProbability = 0.01;
 const fluctuationProbability = 0.01;
 
 const timeStart = 0;
-var timeFrameLength = 500;
+var timeFrameLength = 100;
 e_inputTextFrameLength.value = timeFrameLength;
 
 var frameCounter = 0;
