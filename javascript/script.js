@@ -35,7 +35,7 @@ const fluctuationProbability = 0.01;
 const twinProbability = 0.05;
 var igniterDrop_waitForTwin = false;
 var extinguisherDrop_waitForTwin = false;
-var changeCharactersNthFrames = 2;
+var changeCharactersNthFrames = 3;
 
 var timeStart = 0;
 var timeFrameLength = 100;

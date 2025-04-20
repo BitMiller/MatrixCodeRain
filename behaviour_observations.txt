@@ -60,6 +60,8 @@ Excitement levels / States
 > Because of this behaviour unignited or unextinguished characters can be left behind.
 > Blank space is also amongst the randomizable characters.
 
+> Dynamic characters change in 3 drop steps. If a drop steps 1 character per frame, dynamic characters change once per 3 frames.
+
 > I define 7 levels of phosphor excitement of the CRT screen for this animation:
  > 6: Glowing drop character
  > 5: Fading glow level 1.
@@ -77,13 +79,18 @@ Excitement levels / States
 > A state 2 character location turns into state 1.
 > A state 1 character location turns into state 0 and stays there until touched by igniter drops.
 
-> For proper animation randomness has to be smartly handled.
+> For a proper animation randomness has to be handled smartly.
+
+> I set these rules so to cover all the observable behaviours, and the glitches as well.
+> If a glitch can be explained by a rare constellation of my rules, I don't set a new rule for that.
 
 Questions:
 > Is there an observable standalone dynamic character?
 
+I also realized toggling the debug mask for the screen that I'm peeking inside the matrix of the Matrix Code Rain :)
+
 If you find a bug in the animation - it's not my fault. It is a bug in the Matrix.
 
 Stare it with love!
-I've put lots of chicks inside there 🙂
+I've put lots of chicks inside there :)
 

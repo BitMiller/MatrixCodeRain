@@ -125,7 +125,7 @@ body {
         0px 0px 25px #9F9,
         0px 0px 35px #3F3,
         0px 0px 35px #0F0,
-        0px 0px 45px #0F0,
+        0px 0px 45px #0F0;
 }
 
 .cl_state_04 {
@@ -135,7 +135,7 @@ body {
         0px 0px 15px #3F3,
         0px 0px 25px #0C0,
         0px 0px 35px #0A0,
-        0px 0px 35px #090,
+        0px 0px 35px #090;
 }
 
 .cl_state_03 {
@@ -143,7 +143,7 @@ body {
     text-shadow:
         0px 0px 05px #0F0,
         0px 0px 15px #0A0,
-        0px 0px 25px #060,
+        0px 0px 25px #060;
 }
 
 .cl_state_02 {
@@ -151,14 +151,14 @@ body {
     text-shadow:
         0px 0px 05px #090,
         0px 0px 15px #060,
-        0px 0px 25px #030,
+        0px 0px 25px #030;
 }
 
 .cl_state_01 {
     color: #030;
     text-shadow:
         0px 0px 05px #060,
-        0px 0px 15px #030,
+        0px 0px 15px #030;
 }
 
 .cl_state_00 {
