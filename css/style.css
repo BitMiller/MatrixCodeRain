@@ -106,6 +106,8 @@ body {
     color: #FFF;
     text-shadow:
         0px 0px 05px #FFF,
+        0px 0px 05px #FFF,
+        0px 0px 05px #FFF,
         0px 0px 15px #FFF,
         0px 0px 25px #FFF,
         0px 0px 35px #AFA,
@@ -115,13 +117,14 @@ body {
         0px 0px 35px #0F0,
         0px 0px 45px #0F0,
         0px 0px 55px #0F0;
+    z-index: 11;
 }
 
 .cl_state_05 {
-    color: #9F9;
+    color: #BFB;
     text-shadow:
-        0px 0px 05px #9F9,
-        0px 0px 15px #9F9,
+        0px 0px 05px #BFB,
+        0px 0px 15px #BFB,
         0px 0px 25px #9F9,
         0px 0px 35px #3F3,
         0px 0px 35px #0F0,
@@ -141,30 +144,30 @@ body {
 .cl_state_03 {
     color: #0A0;
     text-shadow:
-        0px 0px 05px #0F0,
-        0px 0px 15px #0A0,
+        0px 0px 05px #0A0,
+        0px 0px 15px #090,
         0px 0px 25px #060;
 }
 
 .cl_state_02 {
     color: #070;
     text-shadow:
-        0px 0px 05px #090,
-        0px 0px 15px #060,
+        0px 0px 05px #070,
+        0px 0px 15px #050,
         0px 0px 25px #030;
 }
 
 .cl_state_01 {
     color: #030;
     text-shadow:
-        0px 0px 05px #060,
-        0px 0px 15px #030;
+        0px 0px 05px #030,
+        0px 0px 15px #020;
 }
 
 .cl_state_00 {
     color: black;
     text-shadow: none;
-    visibility: hidden;
+    opacity: 0;
 }
 
 
@@ -178,6 +181,23 @@ body {
     font-family: 'M+ 1m', 'Noto Sans Mono CJK JP', Consolas, monospace;
     position: absolute;
     z-index: 1;
+    /*transition: opacity 0.2s ease;*/
+}
+
+.cl_visiblePage {
+    opacity: 1;
+    /*transition: opacity 0.2s ease;*/
+    z-index: 2;
+}
+
+.cl_drawingPage {
+    opacity: 0;
+}
+
+.cl_restingPage {
+    opacity: 0;
+    /*transition: opacity 0.2s 0.4s ease;*/
+    z-index: 1;
 }
 
 .cl_screenPage span {
@@ -188,14 +208,6 @@ body {
     align-items: center;
     width: 100%;
     height: 100%;
-}
-
-.cl_activePage {
-    visibility: hidden;
-}
-
-.cl_visiblePage {
-    visibility: visible;
 }
 
 
@@ -220,3 +232,25 @@ body {
     pointer-events: none;
 }
 
+#id_crtScreenMask {
+    /*width: 990px;
+    height: 720px;*/
+    /*width: 190px;
+    height: 120px;*/
+    /*background-color: orange;*/
+    color: white;
+
+    background-image: url("../images/crt_screen_mask.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /*background-color: red;*/
+/*
+    mask-image: url(images/crt_screen_mask.png);
+    mask-mode: alpha;
+    mask-repeat: no-repeat;
+    mask-size: cover;
+*/
+    position: absolute;
+    z-index: 10;
+}

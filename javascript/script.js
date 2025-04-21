@@ -1,14 +1,19 @@
 
-var e_a_screen = new Array(document.getElementById("id_screen_a"), document.getElementById("id_screen_b"));
+var e_a_screen = new Array(document.getElementById("id_screen_a"), document.getElementById("id_screen_b"), document.getElementById("id_screen_c"));
 e_a_screen[0].classList.add("cl_screenPage");
 e_a_screen[1].classList.add("cl_screenPage");
+e_a_screen[2].classList.add("cl_screenPage");
 
 var e_debugMask = document.getElementById("id_debugMask");
 var showDebugMask = false;
 if (!showDebugMask) e_debugMask.classList.add("cl_displayNone");
 
+var e_crtScreenMask = document.getElementById("id_crtScreenMask");
+e_crtScreenMask.style.width = String(990 / window.devicePixelRatio) + "px";
+e_crtScreenMask.style.height = String(720 / window.devicePixelRatio) + "px";
+//e_crtScreenMask.style.height = String(window.devicePixelRatio) + "px";
+
 var a_screenSpace = new Array();
-//var a_rainSpace = new Array();
 var a_igniterDrops = new Array();
 var a_extinguisherDrops = new Array();
 
@@ -19,10 +24,12 @@ var screenSpaceY = 30;
 
 e_a_screen[0].style.gridTemplateColumns = "repeat(" + screenSpaceX + ", 1.5ch)";
 e_a_screen[1].style.gridTemplateColumns = "repeat(" + screenSpaceX + ", 1.5ch)";
+e_a_screen[2].style.gridTemplateColumns = "repeat(" + screenSpaceX + ", 1.5ch)";
 e_debugMask.style.gridTemplateColumns = "repeat(" + screenSpaceX + ", 1.5ch)";
 
 e_a_screen[0].style.gridTemplateRows = "repeat(" + screenSpaceY + ", 1.2em)";
 e_a_screen[1].style.gridTemplateRows = "repeat(" + screenSpaceY + ", 1.2em)";
+e_a_screen[2].style.gridTemplateRows = "repeat(" + screenSpaceY + ", 1.2em)";
 e_debugMask.style.gridTemplateRows = "repeat(" + screenSpaceY + ", 1.2em)";
 
 const countPerDropType = 60;
@@ -43,8 +50,9 @@ e_inputTextFrameLength.value = timeFrameLength;
 
 var frameCounter = 0;
 var stopAtFrame_debug = -1;
-var activePage = 1;
 var visiblePage = 0;
+var restingPage = 1;
+var drawingPage = 2;
 
 const charNumNotMirrored = chars_numbers_notMirrored.length;
 const charNumNotBold = chars_numbers_notMirrored.length + chars_numbers_mirrored.length + 2/*ç,Z*/;
@@ -79,28 +87,34 @@ function initScreenSpace() {
             let t_character = charIndex;
             let t_static = Math.random() < 0.33 ? false : true;
             let t_state = 0;
-            let t_a_element = new Array(document.createElement("span"), document.createElement("span"));
+            let t_a_element = new Array(document.createElement("span"), document.createElement("span"), document.createElement("span"));
             let t_debugElement = document.createElement("span");
 
             t_a_element[0].innerHTML = a_charray[charIndex];
             t_a_element[1].innerHTML = a_charray[charIndex];
+            t_a_element[2].innerHTML = a_charray[charIndex];
             t_debugElement.innerHTML = " ";
 
             if (charIndex >= charNumNotMirrored) {
                 t_a_element[0].classList.add("cl_mirrorY");
                 t_a_element[1].classList.add("cl_mirrorY");
+                t_a_element[2].classList.add("cl_mirrorY");
             }
             if (charIndex >= charNumNotBold) {
                 t_a_element[0].classList.add("cl_bold");
                 t_a_element[1].classList.add("cl_bold");
+                t_a_element[2].classList.add("cl_bold");
             }
             t_a_element[0].classList.add("cl_state_0" + t_state);
             t_a_element[1].classList.add("cl_state_0" + t_state);
+            t_a_element[2].classList.add("cl_state_0" + t_state);
 
             e_a_screen[0].classList.add("cl_visiblePage");
-            e_a_screen[1].classList.add("cl_activePage");
+            e_a_screen[1].classList.add("cl_drawingPage");
+            e_a_screen[1].classList.add("cl_restingPage");
             e_a_screen[0].appendChild(t_a_element[0]);
             e_a_screen[1].appendChild(t_a_element[1]);
+            e_a_screen[2].appendChild(t_a_element[2]);
             e_debugMask.appendChild(t_debugElement);
             a_screenSpace[j].push(createCharacterLocation(t_character, t_static, t_blind, t_state, t_a_element, t_debugElement));
         }
@@ -259,31 +273,31 @@ function changeCharacters() {
     for (let j = 0; j < screenSpaceY; j++) {
         for (let i = 0; i < screenSpaceX; i++) {
             if (!a_screenSpace[j][i].blind) {
-                a_screenSpace[j][i].a_element[activePage].innerHTML = a_screenSpace[j][i].a_element[visiblePage].innerHTML;
-                a_screenSpace[j][i].a_element[activePage].className = a_screenSpace[j][i].a_element[visiblePage].className;
+                a_screenSpace[j][i].a_element[drawingPage].innerHTML = a_screenSpace[j][i].a_element[restingPage].innerHTML;
+                a_screenSpace[j][i].a_element[drawingPage].className = a_screenSpace[j][i].a_element[restingPage].className;
                 /* Update dynamic characters */
                 if (frameCounter % changeCharactersNthFrames == 0 && !a_screenSpace[j][i].blind && !a_screenSpace[j][i].static) {
-                    changeCharacter(a_screenSpace[j][i].a_element[activePage]);
+                    changeCharacter(a_screenSpace[j][i].a_element[drawingPage]);
                 }
                 /* Check if the location got touched by drops */
                 if (a_screenSpace[j][i].touched != 0) {
                     /* Ignited */
-                    if (a_screenSpace[j][i].touched == 1 && a_screenSpace[j][i].state >= 0 && a_screenSpace[j][i].state <= 2) {
+                    if (a_screenSpace[j][i].touched == 1 && a_screenSpace[j][i].state <= 2) {
                         a_screenSpace[j][i].state = 6;
                     }
                     /* Extinguished */
-                    else if (a_screenSpace[j][i].touched == -1 && a_screenSpace[j][i].state >= 3 && a_screenSpace[j][i].state <= 6) {
+                    else if (a_screenSpace[j][i].touched == -1 && a_screenSpace[j][i].state >= 3) {
                         a_screenSpace[j][i].state = 2;
                     }
-                    clearStateClasses(a_screenSpace[j][i].a_element[activePage]);
-                    a_screenSpace[j][i].a_element[activePage].classList.add("cl_state_0" + a_screenSpace[j][i].state);
+                    clearStateClasses(a_screenSpace[j][i].a_element[drawingPage]);
+                    a_screenSpace[j][i].a_element[drawingPage].classList.add("cl_state_0" + a_screenSpace[j][i].state);
                     a_screenSpace[j][i].touched = 0;
                 }
                 /* If not touched and differs from the glow-static state */
                 else if (a_screenSpace[j][i].state > 0 && a_screenSpace[j][i].state <= 6 && a_screenSpace[j][i].state != 3) {
                     a_screenSpace[j][i].state--;
-                    clearStateClasses(a_screenSpace[j][i].a_element[activePage]);
-                    a_screenSpace[j][i].a_element[activePage].classList.add("cl_state_0" + a_screenSpace[j][i].state);
+                    clearStateClasses(a_screenSpace[j][i].a_element[drawingPage]);
+                    a_screenSpace[j][i].a_element[drawingPage].classList.add("cl_state_0" + a_screenSpace[j][i].state);
                 }
             }
         }
@@ -300,7 +314,7 @@ function clearStateClasses(e) {
 function refreshActiveFromVisible() {
     for (let j = 0; j < screenSpaceY; j++) {
         for (let i = 0; i < screenSpaceX; i++) {
-            e_a_screen[j][i].a_element[activePage].innerHTML = e_a_screen[j][i].a_element[visiblePage].innerHTML;
+            e_a_screen[j][i].a_element[drawingPage].innerHTML = e_a_screen[j][i].a_element[visiblePage].innerHTML;
         }
     }
 }
@@ -330,7 +344,7 @@ function step() {
     flipPages();
     frameCounter++;
 //    console.log("frameCounter: " + frameCounter);
-//    console.log("activePage: " + activePage);
+//    console.log("drawingPage: " + drawingPage);
 
     /* Then spend time with the calculation */
     dropStep();
@@ -348,12 +362,15 @@ function changeCharacter(chr) {
 }
 
 function flipPages() {
-    e_a_screen[activePage].classList.remove("cl_activePage");
     e_a_screen[visiblePage].classList.remove("cl_visiblePage");
-    activePage = 1 - activePage;
-    visiblePage = 1 - activePage;
-    e_a_screen[activePage].classList.add("cl_activePage");
+    e_a_screen[restingPage].classList.remove("cl_restingPage");
+    e_a_screen[drawingPage].classList.remove("cl_drawingPage");
+    visiblePage = (visiblePage+1) % 3;
+    restingPage = (visiblePage+1) % 3;
+    drawingPage = (visiblePage+2) % 3;
     e_a_screen[visiblePage].classList.add("cl_visiblePage");
+    e_a_screen[restingPage].classList.add("cl_restingPage");
+    e_a_screen[drawingPage].classList.add("cl_drawingPage");
 }
 
 function startAnimation() {

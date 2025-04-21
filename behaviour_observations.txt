@@ -84,9 +84,6 @@ Excitement levels / States
 > I set these rules so to cover all the observable behaviours, and the glitches as well.
 > If a glitch can be explained by a rare constellation of my rules, I don't set a new rule for that.
 
-Questions:
-> Is there an observable standalone dynamic character?
-
 I also realized toggling the debug mask for the screen that I'm peeking inside the matrix of the Matrix Code Rain :)
 
 If you find a bug in the animation - it's not my fault. It is a bug in the Matrix.
@@ -94,3 +91,6 @@ If you find a bug in the animation - it's not my fault. It is a bug in the Matri
 Stare it with love!
 I've put lots of chicks inside there :)
 
+
+Questions:
+-
