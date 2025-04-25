@@ -41,12 +41,13 @@ Excitement levels / States
 > There's only one layer. No multiple rain layers in the background.
 > All drops have the same fall speed.
 > Let fall speed be 1 character per frame.
+> Dynamic characters change in 3 drop steps. If a drop steps 1 character per frame, dynamic characters change once per 3 frames.
 > Changes in character location state happens with slight transition due to the inertia of the phosphor excitement.
 > Drops can often fall in pairs. I call them twins. But they are not connected. One can die independently from the other.
 > After the igniter drop the glow disappears in 4 characters. The trail's 4th character doesn't glow at all.
 > The extinguisher drop in effect is virtually the 2nd character from the trail's end. The trail fades to black in 2 characters. Putting it another way: a character location fades to black in 3 frames.
-> Any character space can have two behaviours: changing and non-changing.
-> Let 66% of the character locations be non-changing.
+> Any character space can have two behaviours: changing (dynamic) and non-changing (static).
+> Let 66% of the character locations be non-changing / static.
 > Standalone character locations rarely can be ignited at random places.
 > Very rarely can happen that a non-changing character changes, even so it keeps the non-changing state.
 > Let's suppose: The random ignition of character locations changes also the static character (except the case when the randomly generated ignited character is the same as the preceding one) without a glow-up.
@@ -59,8 +60,6 @@ Excitement levels / States
 > Because of this jumping the drops' movement has to be simulated 1-1 columns offscreen.
 > Because of this behaviour unignited or unextinguished characters can be left behind.
 > Blank space is also amongst the randomizable characters.
-
-> Dynamic characters change in 3 drop steps. If a drop steps 1 character per frame, dynamic characters change once per 3 frames.
 
 > I define 7 levels of phosphor excitement of the CRT screen for this animation:
  > 6: Glowing drop character
@@ -83,6 +82,8 @@ Excitement levels / States
 
 > I set these rules so to cover all the observable behaviours, and the glitches as well.
 > If a glitch can be explained by a rare constellation of my rules, I don't set a new rule for that.
+
+> The drop-twins may symbolise the Wachowskis.
 
 I also realized toggling the debug mask for the screen that I'm peeking inside the matrix of the Matrix Code Rain :)
 
